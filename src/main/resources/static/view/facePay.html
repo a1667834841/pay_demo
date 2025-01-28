@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="main">
+    <div id = "message" ></div>
+    <div style="display: inline;">
+        <label class="label">金额：</label>
+        <input type="text" id="totalAmount" name="totalAmount" placeholder="0.01"><br>
+    </div>
+
+    <div style="display: inline;">
+        <label class="label">商品信息：</label>
+        <input type="text" id="subject" name="subject" placeholder="测试"><br>
+    </div>
+    <button id="qrcode" style="display: inline-block;text-align: center">qrcode</button>
+
+</div>
+
+
+<div id = "payMsg" style="float: right"></div>
+<div id = "payedList" style=" position: absolute; bottom: 0;font-size: small; text-align: center;width:100%"></div>
+
+</body>
+</html>
+<style>
+    label{
+        width: 30%;
+        text-align: right;
+
+        padding-right: 8px;
+    }
+    .main{
+        text-align: left; /*让div内部文字居中*/
+        background-color: #fff;
+        border-radius: 20px;
+        width: 500px;
+        height: 350px;
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+    }
+
+</style>
+
+
+<script src="/layui/layui.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.8.3/jquery.min.js">
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+<script>
+
+
+    setInterval(function () {
+        $.ajax(
+            {
+                url:"http://1.15.141.114:9002/payBill/latest/10",
+                success:function (res) {
+                    console.log(res);
+                    var innerHTML = "";
+                    for (let i = 0; i < res.data.length; i++) {
+                        innerHTML += "<p>"+res.data[i].createTime + "  " + res.data[i].buyerLogonId +"  "+ res.data[i].payAmount+"</p>"
+                    }
+                    $("#payedList").html(innerHTML)
+                }
+            }
+        )
+    },1000)
+
+    let orderNum = null;
+    $("#qrcode").click(function(){
+        orderNum = new Date().getTime();
+
+        createClient()
+
+
+        $("#message").empty()
+        let totalAmount =$("#totalAmount").val()
+        let subject =$("#subject").val()
+
+        $.ajax({
+            url:"http://1.15.141.114:9002/ali/pay/face/qccode?totalAmount="+totalAmount+"&subject=" +subject+
+                "&tradeNo="+orderNum+
+                "&notifyUrl=http://1.15.141.114:9002/test/notify",
+            success:function(result){
+                console.log(result);
+
+                var qrcode = new QRCode("message", {
+                    text: result.data,
+                    width: 130,
+                    height: 130,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
+                // $("#message").html(result);
+            }});
+    });
+
+
+    let source;
+    function createClient() {
+        if (window.EventSource) {
+
+            source = new EventSource(
+                'http://1.15.141.114:9002/test/result?orderNum='+orderNum);
+
+            // 建立连接
+            setMessageInnerHTML("当前单号=" + orderNum);
+            /**
+             * 连接一旦建立，就会触发open事件
+             * 另一种写法：source.onopen = function (event) {}
+             */
+            source.addEventListener('open', function(e) {
+                setMessageInnerHTML("建立连接。。。");
+            }, false);
+
+            /**
+             * 客户端收到服务器发来的数据
+             * 另一种写法：source.onmessage = function (event) {}
+             */
+            source.addEventListener('message', function(e) {
+                setMessageInnerHTML(e.data);
+            });
+
+
+            /**
+             * 如果发生通信错误（比如连接中断），就会触发error事件
+             * 或者：
+             * 另一种写法：source.onerror = function (event) {}
+             */
+            source.addEventListener('error', function(e) {
+                if (e.readyState === EventSource.CLOSED) {
+                    setMessageInnerHTML("连接关闭");
+                } else {
+                    console.log(e);
+                }
+            }, false);
+
+        } else {
+            setMessageInnerHTML("你的浏览器不支持SSE");
+        }
+    }
+
+
+    // 监听窗口关闭事件，主动去关闭sse连接，如果服务端设置永不过期，浏览器关闭后手动清理服务端数据
+    window.onbeforeunload = function() {
+        closeSse();
+    };
+
+    // 关闭Sse连接
+    function closeSse() {
+        source.close();
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.open('GET', 'http://1.15.141.114:9002/test/close?orderNum=' + orderNum, true);
+        httpRequest.send();
+        console.log("close");
+    }
+
+    // 将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('payMsg').innerHTML += innerHTML + '<br/>';
+    }
+
+</script>

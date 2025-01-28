@@ -1,0 +1,47 @@
+server:
+  port: 9002
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  profiles:
+    include: application-business
+  datasource:
+    username: hsp
+    password: 123456
+    url: jdbc:sqlite:data/pay.db
+    driver-class-name: org.sqlite.JDBC
+    tomcat:
+      max-active: 1
+  #    schema: classpath:schema.sql
+#    data: classpath:data.sql
+#    initialization-mode: always
+#    continue-on-error: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+logging:
+  level:
+    root: info
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/jsp/
+#      suffix: .jsp
+
+
+
+ali:
+  pay:
+    server_url: "https://openapi.alipay.com/gateway.do"
+    appId: 2021003156624069
+    private_key: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC+mFWpWNdjwMuaLd0GG8xrc6xctrGVtoy2jUJZJcZiov+dfxV53u/7L6dJdwgPASXJxXOWbf1/iFklakjsZj3dStBObNhE84RQEhF4nyPz5c4fDHiJDJQBpVR2mG7cb/6n0yp8yyWS9Y7+RZBvn8UNsY//r9zIwI4Vn/6fpR/CUTl3DXDD7Zt2mE4D1cHtN90mtKW7Llw3FfF+869cBZx4CEaQm9YJtxEL8o9emT9+qCOILu553gHPRtTseGohMr+udUlz1TUWt7S+CqidCUv9rI625HPDp74gUH5JWCD5fMaqm8qlhLQpK1qV9gfTZwNY6k0E98m9Mjz0dU5Sj8oPAgMBAAECggEAQ7/is0/hQJRHy4aCCqnXAFsd6dcHSTCa1EliTE4hNu657kI+YBPfOmq2DGdDdhHyXMbTT6XJdowBJEujoGS3mPH/GeGW/uuRHOVPUJFBNnF504+bSRwvgGZEn+OPhMxKuV1WvQV5VcP0EG6p6QPiB/wWM81PrgzEdOtql1Ua9PdNKGZuRNjTqFGHGhab3zbO1D3LX6vhpSyPq6y1P9kgzb4iVSs4CwbsXbLZxSO2odxqHYv6KYYM61yDAymTnPB54NZJ65cmijOJJL7Q0cxVcQMitxC1i6HskhRf2IcGHVnFaoXDJ60l5iG66rb1RZOSV3xweomEALALwWBCYwxYAQKBgQDqFSX9j5AApK2bX3hlB5VnQUvV22yWhFADEkkGG9vqROhT574XkQgj/Ezl7C0JcnUcD1dCKqamPSrBP6cAUQYqq5/aa/Ah0RZBqys8wJJsgnnSoIwPrUDpB6V5t3ge7Oh9XJHc8jWI4+DSYBNJSx9OxU8KaLLvf08yCSEyog4pQwKBgQDQcM9J8BFhIxcwDYhf0nC5SouhIfaBSod15Phdgh1hmMNJqAOTrXEhZ+thzHjqu9BvoFYBhhIwIGxyRaWPBCxU0iDrfmN4LiKkva+2OmK/3K+0aiz/6G3zeE5WXLNdE/cRsnzEaO6rDw2vdVZvzRsihWDMjkTeWXJg4bO3FOp5RQKBgDmPF7dgvMUbuUCyWhVlpvwr1yzv9qSQRmhq75/b69iQNxyiqGB9HiZTHMmQqIZhKaDLuOYhPLc15TR9pV/zjHOjnfwEfJikJDfjkg8vPxIFh1UeezJDpOloIu1qCtR35rcksw1EVZuihR7V1wg3u6wP4l6p3g38HQotqocbyCWnAoGAR02/62gfWd5aKUsH0te3TfttRoLKw7HOIwtf1wUSrfdHHuRFzPfxEl9tSvhaiNoU1IrBwSWvBR2iW3jtyL3BuIZlUona1xrZKQfmmuzgKQgCZzJHEIffTQFjsvFlPjr9MuWe/sVyl7u/j70RA4/jb2y3D2K/tlxc3z12b/PMvg0CgYAZf4iOqiQM45KroZK/0cVnqYOcB3ztI41K6R5wvf+z6cACxje8DWPDJ4sQf9JHiA0LKoXbH637KqcBH4eQKbV6T9yQg2yS8AjubWC0fhzE5w4WSJe2QICffRf2ttiOKRcvZrnQxnrgrDD4WTUrphMnb8JBcryFcTQBZRN71nkRlw==
+    format: json
+    charset: UTF-8
+    public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8mzgYkO9iSdzJjzD88r2CZiIfE6TcbBxLyuaV+DzUnOmT/E0Q2g28jyoFyrSTLixgaPLVVCECTaxiWfw1lJyZXgbC0Gtg54rVb7Sst8WaEDvx0kqaGTwQJdLUx9jA8JLTj5TIr8Z0yX/a5jpfgSrKiR/O4SmygXmY29WRi/kZKMjdbnn3VsARTfNS6KtIQ7AmzhDgIkeedMO9B8fJSU6mLjBAHtIFM9lRju5aFEDCdjaG/3Zw7GP1U8wAqX/oF0Y/QIClYjSYFp/TCk8OxWP8w6z7y0eK4YD4RGwJQP6EJ0yz1l8ZVtlV9W/uFfPwsVWw1y7swJOch6VM/P+drPy1wIDAQAB
+    sign_type: RSA2
+
+
