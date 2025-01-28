@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: registry.cn-hangzhou.aliyuncs.com
   NAMESPACE: ggball
-  IMAGE_NAME: web_crawl
+  IMAGE_NAME: pay
 
 jobs:
   build:
