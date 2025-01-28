@@ -1,15 +1,13 @@
-# Use an official OpenJDK runtime as a parent image
+# Build stage
+FROM maven:3.8-openjdk-8 AS builder
+WORKDIR /build
+COPY pom.xml .
+COPY src src
+RUN mvn clean package -DskipTests
+
+# Run stage
 FROM openjdk:8-jdk-alpine
-
-# Set the working directory in the container
 WORKDIR /app
-
-# Copy the current directory contents into the container at /app
-COPY target/*.jar app.jar
-COPY data/ data/
-
-# Compile the application
-RUN ./mvnw package
-
-# Run the application
+COPY --from=builder /build/target/*.jar app.jar
+COPY data/pay.db data/pay.db
 CMD ["java", "-jar", "app.jar"] 
