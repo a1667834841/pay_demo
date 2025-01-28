@@ -32,7 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-data/
 target/
 .mvn/
 .idea/
