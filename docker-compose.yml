@@ -2,7 +2,7 @@ version: '3'
 
 services:
   pay:
-    build: .
+    image: registry.cn-hangzhou.aliyuncs.com/ggball/pay:latest
     ports:
       - "9002:9002"
     environment:
