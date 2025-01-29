@@ -13,6 +13,7 @@ public class PayDemoApplication {
         SpringApplication.run(PayDemoApplication.class, args);
         log.info("公网地址："+ Ip.getPublicIpv4());
         log.info("内网地址："+ Ip.getLocalIpv4());
+
     }
 
 }
