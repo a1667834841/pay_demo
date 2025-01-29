@@ -53,55 +53,15 @@ public class PayUtils {
         AlipayClient alipayClient = aliPayBusinessConfig.getAlipayClient();
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
         request.setNotifyUrl(Ip.getPublicIpv4()+NOTIFY_PATH);
+//        request.setNotifyUrl(NOTIFY_test_URL);
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", aliPayInfo.getOutTradeNo());
         bizContent.put("total_amount", aliPayInfo.getTotalAmount());
         bizContent.put("subject", aliPayInfo.getSubject());
 
-//// 商品明细信息，按需传入
-//JSONArray goodsDetail = new JSONArray();
-//JSONObject goods1 = new JSONObject();
-//goods1.put("goods_id", "goodsNo1");
-//goods1.put("goods_name", "子商品1");
-//goods1.put("quantity", 1);
-//goods1.put("price", 0.01);
-//goodsDetail.add(goods1);
-//bizContent.put("goods_detail", goodsDetail);
-
-//// 扩展信息，按需传入
-//JSONObject extendParams = new JSONObject();
-//extendParams.put("sys_service_provider_id", "2088511833207846");
-//bizContent.put("extend_params", extendParams);
-
-//// 结算信息，按需传入
-//JSONObject settleInfo = new JSONObject();
-//JSONArray settleDetailInfos = new JSONArray();
-//JSONObject settleDetail = new JSONObject();
-//settleDetail.put("trans_in_type", "defaultSettle");
-//settleDetail.put("amount", 0.01);
-//settleDetailInfos.add(settleDetail);
-//settleInfo.put("settle_detail_infos", settleDetailInfos);
-//bizContent.put("settle_info", settleInfo);
-
-//// 二级商户信息，按需传入
-//JSONObject subMerchant = new JSONObject();
-//subMerchant.put("merchant_id", "2088000603999128");
-//bizContent.put("sub_merchant", subMerchant);
-
-//// 业务参数信息，按需传入
-//JSONObject businessParams = new JSONObject();
-//businessParams.put("busi_params_key", "busiParamsValue");
-//bizContent.put("business_params", businessParams);
-
-//// 营销信息，按需传入
-//JSONObject promoParams = new JSONObject();
-//promoParams.put("promo_params_key", "promoParamsValue");
-//bizContent.put("promo_params", promoParams);
-
         request.setBizContent(bizContent.toString());
         AlipayTradePrecreateResponse response = alipayClient.execute(request);
         if(response.isSuccess()){
-            System.out.println("调用成功");
             log.info("res:{}",response.getBody());
 
             JSONObject jsonObject = JSONObject.parseObject(response.getBody());
@@ -109,7 +69,6 @@ public class PayUtils {
 
         } else {
             log.error("res:{}",response.getBody());
-            System.out.println("调用失败");
             return "";
         }
     }
