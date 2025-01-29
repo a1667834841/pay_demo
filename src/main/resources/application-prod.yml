@@ -1,0 +1,45 @@
+server:
+  port: 9002
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    username: hsp
+    password: 123456
+    url: jdbc:sqlite:data/pay.db
+    driver-class-name: org.sqlite.JDBC
+    tomcat:
+      max-active: 1
+  #    schema: classpath:schema.sql
+#    data: classpath:data.sql
+#    initialization-mode: always
+#    continue-on-error: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+logging:
+  level:
+    root: info
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/jsp/
+#      suffix: .jsp
+
+
+
+ali:
+  pay:
+    server_url: ${ALI_PAY_SERVER_URL:https://openapi.alipay.com/gateway.do}
+    appId: ${ALI_PAY_APP_ID:2021003156624069}
+    private_key: ${ALI_PAY_PRIVATE_KEY:your_private_key_here}
+    format: json
+    charset: UTF-8
+    public_key: ${ALI_PAY_PUBLIC_KEY:your_public_key_here}
+    sign_type: RSA2
+
+
