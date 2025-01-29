@@ -59,7 +59,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 
-    var url = "http://localhost:9002";
+    var url = window.location.protocol + "//" + window.location.hostname + ":9002";
 
     setInterval(function () {
         $.ajax(
