@@ -36,3 +36,4 @@ target/
 .mvn/
 .idea/
 .env
+src/main/resources/application-dev.yml

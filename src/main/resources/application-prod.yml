@@ -12,25 +12,11 @@ spring:
     driver-class-name: org.sqlite.JDBC
     tomcat:
       max-active: 1
-  #    schema: classpath:schema.sql
-#    data: classpath:data.sql
-#    initialization-mode: always
-#    continue-on-error: true
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
 
 
 logging:
   level:
     root: info
-#  mvc:
-#    view:
-#      prefix: /WEB-INF/jsp/
-#      suffix: .jsp
-
-
 
 ali:
   pay:

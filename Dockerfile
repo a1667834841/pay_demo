@@ -11,4 +11,4 @@ WORKDIR /app
 RUN mkdir -p data
 COPY --from=builder /build/target/*.jar app.jar
 COPY data/pay.db data/pay.db
-CMD ["java", "-jar", "app.jar"] 
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]

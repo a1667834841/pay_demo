@@ -2,6 +2,8 @@ server:
   port: 9002
 
 spring:
+  profiles:
+    active: dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -17,7 +19,7 @@ spring:
 #    initialization-mode: always
 #    continue-on-error: true
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
 
@@ -35,11 +37,11 @@ logging:
 ali:
   pay:
     server_url: ${ALI_PAY_SERVER_URL:https://openapi.alipay.com/gateway.do}
-    appId: ${ALI_PAY_APP_ID}
-    private_key: ${ALI_PAY_PRIVATE_KEY}
+    appId: ${ALI_PAY_APP_ID:2021003156624069}
+    private_key: ${ALI_PAY_PRIVATE_KEY:your_private_key_here}
     format: json
     charset: UTF-8
-    public_key: ${ALI_PAY_PUBLIC_KEY}
+    public_key: ${ALI_PAY_PUBLIC_KEY:your_public_key_here}
     sign_type: RSA2
 
 

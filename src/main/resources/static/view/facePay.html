@@ -59,11 +59,12 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
 <script>
 
+    var url = "http://127.0.0.1:9002";
 
     setInterval(function () {
         $.ajax(
             {
-                url:"http://1.15.141.114:9002/payBill/latest/10",
+                url:url+"/payBill/latest/10",
                 success:function (res) {
                     console.log(res);
                     var innerHTML = "";
@@ -88,9 +89,9 @@
         let subject =$("#subject").val()
 
         $.ajax({
-            url:"http://1.15.141.114:9002/ali/pay/face/qccode?totalAmount="+totalAmount+"&subject=" +subject+
+            url:url+"/ali/pay/face/qccode?totalAmount="+totalAmount+"&subject=" +subject+
                 "&tradeNo="+orderNum+
-                "&notifyUrl=http://1.15.141.114:9002/test/notify",
+                "&notifyUrl="+url+"/test/notify",
             success:function(result){
                 console.log(result);
 
@@ -113,7 +114,7 @@
         if (window.EventSource) {
 
             source = new EventSource(
-                'http://1.15.141.114:9002/test/result?orderNum='+orderNum);
+                url+'/test/result?orderNum='+orderNum);
 
             // 建立连接
             setMessageInnerHTML("当前单号=" + orderNum);
@@ -162,7 +163,7 @@
     function closeSse() {
         source.close();
         const httpRequest = new XMLHttpRequest();
-        httpRequest.open('GET', 'http://1.15.141.114:9002/test/close?orderNum=' + orderNum, true);
+        httpRequest.open('GET', url+'/test/close?orderNum=' + orderNum, true);
         httpRequest.send();
         console.log("close");
     }
