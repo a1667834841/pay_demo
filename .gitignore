@@ -35,5 +35,7 @@ build/
 target/
 .mvn/
 .idea/
+*.env
 .env
+.env.*
 src/main/resources/application-dev.yml
