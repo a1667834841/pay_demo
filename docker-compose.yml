@@ -2,6 +2,7 @@ version: '3'
 
 services:
   pay:
+    container_name: pay
     image: registry.cn-hangzhou.aliyuncs.com/ggball/pay:latest
     ports:
       - "9002:9002"
