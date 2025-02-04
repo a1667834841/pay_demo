@@ -44,6 +44,7 @@ public class NotifyJob implements ApplicationRunner {
                         continue;
                     }
 
+                    log.info("开始推送，orderNum：{},推送地址：{}",payBill.getOrderNum(),payBill.getNotifyUrl());
                     HttpRequest request = HttpUtil.createRequest(Method.POST, payBill.getNotifyUrl());
                     request.header("Content-Type","application/x-www-form-urlencoded");
                     PayNotifyVO payNotifyVO = new PayNotifyVO();
