@@ -44,7 +44,7 @@ public class PayUtils {
     /**
      * 支付回调路径
      */
-    private static final String NOTIFY_PATH = "/notify/ali/pay/face/notify";
+    private static final String NOTIFY_PATH = "/ali/pay/face/notify";
 
     /**
      * 预下单
@@ -63,6 +63,7 @@ public class PayUtils {
         bizContent.put("subject", aliPayInfo.getSubject());
 
         request.setBizContent(bizContent.toString());
+        log.info("req notifyUrl:{}",request.getNotifyUrl());
         AlipayTradePrecreateResponse response = alipayClient.execute(request);
         if(response.isSuccess()){
             log.info("res:{}",response.getBody());
