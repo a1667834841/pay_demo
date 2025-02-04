@@ -8,6 +8,7 @@ import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.zhu.facepay.config.AliPayBusinessConfig;
 import com.zhu.facepay.domain.AliPayInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Http2;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,8 @@ public class PayUtils {
 
     @Resource
     private AliPayBusinessConfig aliPayBusinessConfig;
+    @Value("${ali.pay.notify_host}")
+    private String notifyHost;
 
     /**
      * 正式环境
@@ -52,7 +55,7 @@ public class PayUtils {
     public String preCreateOrder(AliPayInfo aliPayInfo) throws AlipayApiException {
         AlipayClient alipayClient = aliPayBusinessConfig.getAlipayClient();
         AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
-        request.setNotifyUrl(Ip.getPublicIpv4()+NOTIFY_PATH);
+        request.setNotifyUrl(notifyHost+NOTIFY_PATH);
 //        request.setNotifyUrl(NOTIFY_test_URL);
         JSONObject bizContent = new JSONObject();
         bizContent.put("out_trade_no", aliPayInfo.getOutTradeNo());

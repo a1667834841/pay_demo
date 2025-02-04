@@ -27,5 +27,6 @@ ali:
     charset: UTF-8
     public_key: ${ALI_PAY_PUBLIC_KEY:your_public_key_here}
     sign_type: RSA2
+    notify_host: ${ALI_PAY_NOTIFY_HOST:http://localhost:9002}
 
 
