@@ -1,7 +1,8 @@
-package com.zhu.facepay.dao;
+package com.zhu.facepay.repository;
 
 import com.zhu.facepay.domain.PayBill;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +18,7 @@ import javax.transaction.Transactional;
  * @createTime 2022年11月22日 11:41:00
  */
 @Repository
-public interface  PayBillRepository extends JpaRepository<PayBill, Long> {
+public interface  PayBillRepository extends JpaRepository<PayBill, Long>, JpaSpecificationExecutor<PayBill> {
     PayBill getPayBillByOrderNum(String orderNum);
 
 

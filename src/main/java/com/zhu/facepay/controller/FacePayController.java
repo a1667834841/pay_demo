@@ -41,7 +41,7 @@ public class FacePayController {
 
 
     /**
-     * http://localhost:9001/view/facePay.html
+     * http://localhost:9002/view/facePay.html
      * @param totalAmount 总金额
      * @param subject 商品名称
      * @param tradeNo 订单号
@@ -54,7 +54,6 @@ public class FacePayController {
         if (StrUtil.isBlank(tradeNo)) {
             tradeNo = "JY"+ DateUtil.current()+ UUID.fastUUID();
         }
-
 
         PayBill payBill = new PayBill();
         payBill.setPayAmount(totalAmount);

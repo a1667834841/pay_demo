@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ggBall
@@ -41,6 +42,16 @@ public class PayBillController {
     @GetMapping("/latest/{num}")
     public ResultData<List<PayBill>> latest(@PathVariable("num") Integer num){
         return ResultData.success(payBillService.latest(num));
+    }
+
+    @GetMapping("/page")
+    public ResultData<Map<String, Object>> getPayBillsWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String orderNum,
+            @RequestParam(required = false) String buyerLogonId,
+            @RequestParam(required = false) Boolean isPay) {
+        return ResultData.success(payBillService.getPayBillsWithPagination(page, size, orderNum, buyerLogonId, isPay));
     }
 
     @GetMapping("/payBillByOrderNum/{orderNum}")

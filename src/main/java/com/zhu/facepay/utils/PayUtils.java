@@ -30,15 +30,6 @@ public class PayUtils {
     @Value("${ali.pay.notify_host}")
     private String notifyHost;
 
-    /**
-     * 正式环境
-     */
-    private static final String NOTIFY_PROD_URL = "https://ggball.top/notify/ali/pay/face/notify";
-
-    /**
-     * 测试环境 需要先开启远程穿透
-     */
-    private static final String NOTIFY_test_URL = "http://1.15.141.114:9000/ali/pay/face/notify";
 
 
     /**

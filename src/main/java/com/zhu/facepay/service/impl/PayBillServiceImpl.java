@@ -1,15 +1,17 @@
 package com.zhu.facepay.service.impl;
 
-import com.zhu.facepay.dao.PayBillRepository;
+import com.zhu.facepay.repository.PayBillRepository;
 import com.zhu.facepay.domain.PayBill;
 import com.zhu.facepay.domain.res.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import javax.persistence.criteria.Predicate;
+import java.util.*;
 
 /**
  * @author ggBall
@@ -81,5 +83,41 @@ public class PayBillServiceImpl {
         //分页:第一条到第十条
         PageRequest pagerequest = PageRequest.of(0,10,sort);
         return  payBillRepository.findAll(pagerequest).getContent();
+    }
+
+    public Map<String, Object> getPayBillsWithPagination(int page, int size, String orderNum, String buyerLogonId, Boolean isPay) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        Specification<PayBill> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (orderNum != null && !orderNum.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("orderNum"), "%" + orderNum + "%"));
+            }
+
+            if (buyerLogonId != null && !buyerLogonId.trim().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("buyerLogonId"), "%" + buyerLogonId + "%"));
+            }
+
+            if (isPay != null) {
+                predicates.add(criteriaBuilder.equal(root.get("isPay"), isPay));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<PayBill> payBillPage = payBillRepository.findAll(spec, pageRequest);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("content", payBillPage.getContent());
+        result.put("totalElements", payBillPage.getTotalElements());
+        result.put("totalPages", payBillPage.getTotalPages());
+        result.put("currentPage", payBillPage.getNumber());
+        result.put("size", payBillPage.getSize());
+        result.put("hasNext", payBillPage.hasNext());
+        result.put("hasPrevious", payBillPage.hasPrevious());
+
+        return result;
     }
 }
