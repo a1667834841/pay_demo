@@ -35,8 +35,9 @@ build/
 target/
 .mvn/
 .idea/
-*.env
-.env
-.env.*
 src/main/resources/application-dev.yml
-data/.*.db
+
+#隐藏 .env /data/pay.db 文件
+.env
+/data/pay.db
+

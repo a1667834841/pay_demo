@@ -5,12 +5,15 @@ import cn.hutool.core.lang.UUID;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.zhu.facepay.domain.AliRefundInfo;
+import com.zhu.facepay.domain.PayBill;
 import com.zhu.facepay.domain.dto.RefundReq;
 import com.zhu.facepay.domain.dto.RefundRes;
 import com.zhu.facepay.domain.res.ResultData;
+import com.zhu.facepay.repository.PayBillRepository;
 import com.zhu.facepay.utils.PayUtils;
 import com.zhu.facepay.domain.AliPayInfo;
 import com.zhu.facepay.service.PayService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,10 +26,13 @@ import javax.annotation.Resource;
  * @createTime 2022年11月21日 18:51:00
  */
 @Service
+@Slf4j
 public class AliPayService implements PayService {
 
     @Resource
     PayUtils payUtils;
+    @Resource
+    PayBillRepository payBillRepository;
 
     @Override
     public String qrCode(String totalAmount, String subject,String outTradeNo) {
@@ -51,6 +57,15 @@ public class AliPayService implements PayService {
 
         AlipayTradeRefundResponse refundResponse = payUtils.refund(aliRefundInfo);
         if (refundResponse.isSuccess() && "Y".equals(refundResponse.getFundChange())) {
+
+            // 修改订单退款状态
+            PayBill payBill = payBillRepository.getPayBillByOrderNum(refundReq.getOutTradeNo());
+            if (payBill != null) {
+                payBill.setIsRefund(false);
+                payBillRepository.saveAndFlush(payBill);
+                log.info("订单号：{} 退款成功", refundReq.getOutTradeNo());
+            }
+
             RefundRes refundRes = new RefundRes();
             refundRes.setOutTradeNo(refundReq.getOutTradeNo());
             refundRes.setTradeNo(refundResponse.getTradeNo());

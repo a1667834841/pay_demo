@@ -1,104 +1,124 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>支付测试页面</title>
+    <title>聚合支付平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a cleaner look */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .card {
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-5 font-sans">
-    <div class="max-w-6xl mx-auto">
-        <h1 class="text-2xl text-gray-800 mb-5 text-center">支付测试页面</h1>
+<body class="bg-base-200 min-h-screen p-4 sm:p-8 font-sans">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-base-content">聚合支付平台</h1>
+            <p class="text-base-content/70 mt-2">一个简洁、高效的支付测试环境</p>
+        </header>
 
-        <!-- 创建支付 -->
-        <div class="bg-white rounded-lg shadow-md mb-5 p-5">
-            <h3 class="text-lg font-medium mb-4">创建新支付</h3>
-            <div class="flex gap-4 mb-4 items-end flex-col md:flex-row">
-                <div class="flex-1">
-                    <label for="totalAmount" class="block mb-1 text-gray-600 font-medium">支付金额 (元)</label>
-                    <input type="number" id="totalAmount" placeholder="0.01" step="0.01" min="0.01"
-                           class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="flex-1">
-                    <label for="subject" class="block mb-1 text-gray-600 font-medium">商品信息</label>
-                    <input type="text" id="subject" placeholder="测试商品" value="测试商品"
-                           class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="flex-1">
-                    <label class="block mb-1">&nbsp;</label>
-                    <button class="px-5 py-2 bg-blue-600 text-white rounded text-sm cursor-pointer hover:bg-blue-700 transition-colors" id="createPayment">生成二维码</button>
-                </div>
-            </div>
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Create Payment -->
+            <div class="lg:col-span-1">
+                <div class="card bg-base-100 shadow-xl sticky top-8">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl mb-4">创建新支付</h2>
+                        <div class="space-y-4">
+                            <div class="form-control w-full">
+                                <label class="label" for="totalAmount"><span class="label-text">支付金额 (元)</span></label>
+                                <input type="number" id="totalAmount" placeholder="例如: 0.1" value="0.1" step="0.1" min="0.01" class="input input-bordered w-full" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label" for="subject"><span class="label-text">商品信息</span></label>
+                                <input type="text" id="subject" placeholder="例如: 一杯咖啡" value="测试商品" class="input input-bordered w-full" />
+                            </div>
+                        </div>
+                        <div class="card-actions mt-6">
+                            <button class="btn btn-primary btn-block" id="createPayment">生成收款码</button>
+                        </div>
 
-            <div class="flex gap-5 mt-5 flex-col lg:flex-row" id="qrSection" style="display: none;">
-                <div class="flex-none w-full lg:w-52 text-center p-5 border-2 border-dashed border-gray-300 rounded-lg min-h-52 flex items-center justify-center" id="qrContainer">
-                    <div class="text-gray-500">等待生成二维码...</div>
-                </div>
-                <div class="flex-1 bg-gray-50 p-4 rounded-lg" id="paymentInfo">
-                    <h4 class="mb-2 text-gray-800">支付信息</h4>
-                    <p class="my-1 text-gray-600"><strong>订单号：</strong><span id="currentOrderNum">-</span></p>
-                    <p class="my-1 text-gray-600"><strong>支付金额：</strong><span id="currentAmount">-</span></p>
-                    <p class="my-1 text-gray-600"><strong>支付状态：</strong><span id="currentStatus">等待支付</span></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 支付记录 -->
-        <div class="bg-white rounded-lg shadow-md mb-5 p-5">
-            <h3 class="text-lg font-medium mb-4">支付记录</h3>
-            <div class="flex gap-4 mb-4 items-end flex-col md:flex-row">
-                <div class="flex-1">
-                    <label for="searchOrderNum" class="block mb-1 text-gray-600 font-medium">订单号</label>
-                    <input type="text" id="searchOrderNum" placeholder="搜索订单号"
-                           class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="flex-1">
-                    <label for="searchBuyerLogonId" class="block mb-1 text-gray-600 font-medium">买家账号</label>
-                    <input type="text" id="searchBuyerLogonId" placeholder="搜索买家账号"
-                           class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="flex-1">
-                    <label for="searchPayStatus" class="block mb-1 text-gray-600 font-medium">支付状态</label>
-                    <select id="searchPayStatus" class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-500">
-                        <option value="">全部</option>
-                        <option value="true">已支付</option>
-                        <option value="false">未支付</option>
-                    </select>
-                </div>
-                <div class="flex-1">
-                    <label class="block mb-1">&nbsp;</label>
-                    <div class="flex gap-2">
-                        <button class="px-5 py-2 bg-blue-600 text-white rounded text-sm cursor-pointer hover:bg-blue-700 transition-colors" id="searchBtn">搜索</button>
-                        <button class="px-5 py-2 bg-gray-600 text-white rounded text-sm cursor-pointer hover:bg-gray-700 transition-colors" id="resetBtn">重置</button>
+                        <div id="qrSection" style="display: none;" class="mt-6 text-center">
+                            <div class="border-2 border-dashed border-base-300 rounded-lg p-4 inline-block" id="qrContainer">
+                                <div class="text-base-content/50">等待生成...</div>
+                            </div>
+                            <div class="flex-1 bg-base-200 p-4 rounded-lg mt-4" id="paymentInfo">
+                                <h3 class="text-lg font-bold mb-2">支付详情</h3>
+                                <p class="text-sm"><strong>订单号：</strong><span id="currentOrderNum">-</span></p>
+                                <p class="text-sm"><strong>支付金额：</strong><span id="currentAmount">-</span></p>
+                                <p class="text-sm"><strong>支付状态：</strong><span id="currentStatus" class="font-bold">等待支付</span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table id="paymentTable" class="w-full border-collapse mt-4">
-                    <thead>
-                        <tr>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">订单号</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">创建时间</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">支付金额</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">买家账号</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">支付状态</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">更新时间</th>
-                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">退款</th>
+            <!-- Right Column: Payment History -->
+            <div class="lg:col-span-2">
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body">
+                        <h2 class="card-title text-xl mb-4">支付记录</h2>
+                        <div class="grid md:grid-cols-3 gap-4 items-end">
+                            <div class="form-control w-full">
+                                <label class="label" for="searchOrderNum"><span class="label-text">订单号</span></label>
+                                <input type="text" id="searchOrderNum" placeholder="搜索订单号" class="input input-bordered w-full" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label" for="searchBuyerLogonId"><span class="label-text">买家账号</span></label>
+                                <input type="text" id="searchBuyerLogonId" placeholder="搜索买家账号" class="input input-bordered w-full" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label" for="searchPayStatus"><span class="label-text">支付状态</span></label>
+                                <select id="searchPayStatus" class="select select-bordered w-full">
+                                    <option value="">全部</option>
+                                    <option value="true">已支付</option>
+                                    <option value="false">未支付</option>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="form-control w-full mt-4">
+                                <div class="flex gap-2 justify-end">
+                                    <button class="btn btn-ghost" id="resetBtn">重置</button>
+                                    <button class="btn btn-primary" id="searchBtn">搜索</button>
+                                </div>
+                            </div>
 
-                        </tr>
-                    </thead>
-                    <tbody id="paymentTableBody">
-                        <tr>
-                            <td colspan="6" class="text-center py-10 text-gray-600">加载中...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <div class="overflow-x-auto mt-4">
+                            <table id="paymentTable" class="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>订单号</th>
+                                        <th>创建时间</th>
+                                        <th>支付金额</th>
+                                        <th>买家账号</th>
+                                        <th>支付状态</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="paymentTableBody">
+                                    <tr><td colspan="7" class="text-center py-10"><span class="loading loading-dots loading-lg"></span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="flex flex-col items-center mt-5" id="pagination"></div>
+                    </div>
+                </div>
             </div>
-
-            <div class="text-center mt-5" id="pagination"></div>
-        </div>
+        </main>
     </div>
+
+    <div id="toast-container" class="toast toast-top toast-center z-50"></div>
 
     <script src="https://cdn.staticfile.org/jquery/1.8.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -125,19 +145,36 @@
             });
         }
 
+        function showToast(message, type = 'info') {
+            const toastContainer = $('#toast-container');
+            let alertClass = 'alert-info';
+            if (type === 'success') alertClass = 'alert-success';
+            if (type === 'error') alertClass = 'alert-error';
+
+            const toastHtml = `
+                <div class="alert ${alertClass} shadow-lg">
+                    <span>${message}</span>
+                </div>
+            `;
+
+            const toastElement = $(toastHtml).appendTo(toastContainer);
+            toastElement.fadeIn(300).delay(3000).fadeOut(500, function() { $(this).remove(); });
+        }
+
         function createPayment() {
             const totalAmount = $('#totalAmount').val();
             const subject = $('#subject').val() || '测试商品';
 
             if (!totalAmount || parseFloat(totalAmount) <= 0) {
-                alert('请输入有效的支付金额');
+                showToast('请输入有效的支付金额', 'error');
                 return;
             }
 
             currentOrderNum = 'PAY' + new Date().getTime();
 
-            $('#qrSection').show();
-            $('#qrContainer').html('<div class="text-gray-600">正在生成二维码...</div>');
+            $('#qrSection').slideDown();
+            $('#qrContainer').html('<div class="flex flex-col items-center gap-2"><span class="loading loading-spinner loading-lg"></span><span>正在生成二维码...</span></div>');
+            $('#currentStatus').text('等待支付').removeClass().addClass('font-bold text-warning');
 
             $.ajax({
                 url: API_BASE_URL + "/ali/pay/face/qccode",
@@ -149,29 +186,30 @@
                     notifyUrl: API_BASE_URL + "/test/notify"
                 },
                 success: function(result) {
-                    debugger
                     if (result.status === 100) {
                         $('#qrContainer').empty();
                         new QRCode(document.getElementById("qrContainer"), {
                             text: result.data,
-                            width: 180,
-                            height: 180,
+                            width: 160,
+                            height: 160,
                             colorDark: "#000000",
                             colorLight: "#ffffff",
                             correctLevel: QRCode.CorrectLevel.H
                         });
 
                         $('#currentOrderNum').text(currentOrderNum);
-                        $('#currentAmount').text('¥' + totalAmount);
-                        $('#currentStatus').text('等待支付').css('color', '#856404');
+                        $('#currentAmount').text('¥' + parseFloat(totalAmount).toFixed(2));
+                        $('#currentStatus').text('等待支付').removeClass().addClass('font-bold text-warning');
 
                         startPaymentListener();
                     } else {
-                        alert('生成支付二维码失败：' + (result.message || '未知错误'));
+                        showToast('生成支付二维码失败：' + (result.message || '未知错误'), 'error');
+                        $('#qrContainer').html('<div class="text-error">生成失败</div>');
                     }
                 },
                 error: function() {
-                    alert('网络错误，请稍后重试');
+                    showToast('网络错误，请稍后重试', 'error');
+                    $('#qrContainer').html('<div class="text-error">网络错误</div>');
                 }
             });
         }
@@ -187,13 +225,13 @@
                     console.log('支付消息：', message);
 
                     if (message.includes('支付成功') || message.includes('TRADE_SUCCESS')) {
-                        $('#currentStatus').text('支付成功').css('color', '#155724');
-                        alert('支付成功！');
+                        $('#currentStatus').text('支付成功').removeClass().addClass('font-bold text-success');
+                        showToast('支付成功！', 'success');
                         closePaymentListener();
                         loadPaymentList();
                     } else if (message.includes('支付失败') || message.includes('TRADE_CLOSED')) {
-                        $('#currentStatus').text('支付失败').css('color', '#721c24');
-                        alert('支付失败');
+                        $('#currentStatus').text('支付失败').removeClass().addClass('font-bold text-error');
+                        showToast('支付失败', 'error');
                         closePaymentListener();
                     }
                 });
@@ -247,11 +285,11 @@
                         renderPaymentTable(result.data);
                         renderPagination(result.data);
                     } else {
-                        $('#paymentTableBody').html('<tr><td colspan="6">加载失败：' + (result.message || '未知错误') + '</td></tr>');
+                        $('#paymentTableBody').html('<tr><td colspan="7" class="text-center py-10">加载失败：' + (result.message || '未知错误') + '</td></tr>');
                     }
                 },
                 error: function() {
-                    $('#paymentTableBody').html('<tr><td colspan="6">网络错误，无法加载支付列表</td></tr>');
+                    $('#paymentTableBody').html('<tr><td colspan="7" class="text-center py-10">网络错误，无法加载支付列表</td></tr>');
                 }
             });
         }
@@ -260,7 +298,7 @@
             const tbody = $('#paymentTableBody');
 
             if (!data.content || data.content.length === 0) {
-                tbody.html('<tr><td colspan="6" class="text-center py-10 text-gray-500">暂无支付记录</td></tr>');
+                tbody.html('<tr><td colspan="7" class="text-center py-10 text-base-content/50">暂无支付记录</td></tr>');
                 return;
             }
 
@@ -273,30 +311,29 @@
 
                 let statusHtml = '';
                 if (payment.isPay === true) {
-                    statusHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">已支付</span>';
+                    statusHtml = '<div class="badge badge-success gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>已支付</div>';
                 } else {
-                    statusHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">未支付</span>';
+                    statusHtml = '<div class="badge badge-warning gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>未支付</div>';
                 }
 
                 let refundHtml = '';
                 if (payment.isPay === false && (payment.isRefund === null || payment.isRefund === '' || payment.isRefund === undefined)) {
-                    refundHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">无需退款</span>';
-                } else
-                if (payment.isRefund === true) {
-                    refundHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">已退款</span>';
+                    refundHtml = '<div class="badge badge-ghost">无需退款</div>';
+                } else if (payment.isRefund === true) {
+                    refundHtml = '<div class="badge badge-error">已退款</div>';
                 } else {
-                    refundHtml = '<button class="px-2 py-1 bg-blue-600 text-white rounded text-xs cursor-pointer hover:bg-blue-700" onclick="refundPayment(\'' + payment.orderNum + '\')">退款</button>';
+                    refundHtml = `<button class="btn btn-xs btn-ghost text-primary" onclick="refundPayment('${payment.orderNum}')">退款</button>`;
                 }
 
                 html += `
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 py-3 border-b border-gray-200" title="${payment.orderNum}">${truncateText(payment.orderNum, 25)}</td>
-                        <td class="px-3 py-3 border-b border-gray-200">${createTime}</td>
-                        <td class="px-3 py-3 border-b border-gray-200"><strong>${amount}</strong></td>
-                        <td class="px-3 py-3 border-b border-gray-200">${buyerLogonId}</td>
-                        <td class="px-3 py-3 border-b border-gray-200">${statusHtml}</td>
-                        <td class="px-3 py-3 border-b border-gray-200">${updateTime}</td>
-                        <td class="px-3 py-3 border-b border-gray-200">${refundHtml}</td>
+                    <tr class="hover">
+                        <td title="${payment.orderNum}">${truncateText(payment.orderNum, 20)}</td>
+                        <td>${createTime}</td>
+                        <td><strong>${amount}</strong></td>
+                        <td>${buyerLogonId}</td>
+                        <td>${statusHtml}</td>
+                        <td>${updateTime}</td>
+                        <td>${refundHtml}</td>
                     </tr>
                 `;
             });
@@ -312,36 +349,21 @@
                 return;
             }
 
-            let html = '';
+            let html = '<div class="join">';
+            
+            html += `<button ${data.first ? 'disabled' : ''} onclick="changePage(${currentPage - 1})" class="join-item btn btn-sm">«</button>`;
+            
+            html += `<button class="join-item btn btn-sm">第 ${currentPage + 1} / ${data.totalPages} 页</button>`;
+            
+            html += `<button ${data.last ? 'disabled' : ''} onclick="changePage(${currentPage + 1})" class="join-item btn btn-sm">»</button>`;
 
-            // 上一页
-            html += `<button ${data.hasPrevious ? '' : 'disabled'} onclick="changePage(${currentPage - 1})"
-                     class="mx-1 px-3 py-2 border border-gray-300 bg-white rounded cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">上一页</button>`;
-
-            // 页码
-            const startPage = Math.max(0, currentPage - 2);
-            const endPage = Math.min(data.totalPages - 1, currentPage + 2);
-
-            for (let i = startPage; i <= endPage; i++) {
-                const activeClass = i === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'bg-white hover:bg-gray-50';
-                html += `<button onclick="changePage(${i})"
-                         class="mx-1 px-3 py-2 border border-gray-300 rounded cursor-pointer ${activeClass}">${i + 1}</button>`;
-            }
-
-            // 下一页
-            html += `<button ${data.hasNext ? '' : 'disabled'} onclick="changePage(${currentPage + 1})"
-                     class="mx-1 px-3 py-2 border border-gray-300 bg-white rounded cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">下一页</button>`;
-
-            // 信息
-            html += `<div class="mt-3 text-gray-600 text-sm">
-                        共 ${data.totalElements} 条记录，第 ${currentPage + 1} / ${data.totalPages} 页
-                     </div>`;
-
+            html += '</div>';
+            
             pagination.html(html);
         }
 
         function refundPayment(orderNum) {
-            if (!confirm('确定要退款吗？')) return;
+            if (!confirm('确定要为订单 ' + orderNum + ' 退款吗？')) return;
 
             $.ajax({
                 url: API_BASE_URL + "/ali/pay/face/refund",
@@ -350,38 +372,29 @@
                 data: JSON.stringify({ outTradeNo: orderNum }),
                 success: function(result) {
                     if (result.status === 100) {
-                        alert('退款请求已发送，请等待处理');
+                        showToast('退款请求已发送，请等待处理', 'info');
                         loadPaymentList();
                     } else {
-                        alert('退款失败：' + (result.message || '未知错误'));
+                        showToast('退款失败：' + (result.message || '未知错误'), 'error');
                     }
                 },
                 error: function() {
-                    alert('网络错误，无法发送退款请求');
+                    showToast('网络错误，无法发送退款请求', 'error');
                 }
             });
         }
 
         function changePage(page) {
-            if (page < 0) return;
+            if (page < 0 || page >= currentPage.totalPages) return;
             currentPage = page;
             loadPaymentList();
         }
 
         function formatDateTime(dateStr) {
             if (!dateStr) return '-';
-
             const date = new Date(dateStr);
             if (isNaN(date.getTime())) return '-';
-
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-
-            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            return date.toLocaleString('zh-CN', { hour12: false }).replace(/\//g, '-');
         }
 
         function truncateText(text, maxLength) {
