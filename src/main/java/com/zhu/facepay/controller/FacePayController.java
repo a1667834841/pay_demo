@@ -7,6 +7,8 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.zhu.facepay.config.AliPayBusinessConfig;
 import com.zhu.facepay.domain.PayBill;
+import com.zhu.facepay.domain.dto.RefundReq;
+import com.zhu.facepay.domain.dto.RefundRes;
 import com.zhu.facepay.domain.res.ResultData;
 import com.zhu.facepay.service.PayService;
 import com.zhu.facepay.service.impl.PayBillServiceImpl;
@@ -124,6 +126,25 @@ public class FacePayController {
         }
 
     }
+
+    /**
+     * alipay.trade.refund.depositback.completed(收单退款冲退完成通知)
+     */
+    @PostMapping("/refund")
+    public ResultData<RefundRes> refund(@RequestBody RefundReq refundReq) {
+        log.info("refund info:{}", refundReq);
+        if (StrUtil.isBlank(refundReq.getTradeNo()) && StrUtil.isBlank(refundReq.getOutTradeNo())) {
+            return ResultData.fail("tradeNo or outTradeNo must be provided");
+        }
+        try {
+            return payService.refund(refundReq);
+        } catch (Exception e) {
+            log.error("refund error:{}", e.getMessage());
+            return ResultData.fail("Refund failed: " + e.getMessage());
+        }
+
+    }
+
 
 
 }

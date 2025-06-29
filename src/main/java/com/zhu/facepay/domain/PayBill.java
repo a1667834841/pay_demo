@@ -98,5 +98,10 @@ public class PayBill extends Node implements Serializable {
      */
     private String notifyUrl;
 
+    /**
+     * 是否退款
+     */
+    private Boolean isRefund;
+
 
 }

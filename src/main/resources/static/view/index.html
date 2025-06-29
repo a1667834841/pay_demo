@@ -84,6 +84,8 @@
                             <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">买家账号</th>
                             <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">支付状态</th>
                             <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">更新时间</th>
+                            <th class="px-3 py-3 text-left border-b border-gray-200 bg-gray-50 font-semibold text-gray-800">退款</th>
+
                         </tr>
                     </thead>
                     <tbody id="paymentTableBody">
@@ -241,7 +243,7 @@
                 method: 'GET',
                 data: searchParams,
                 success: function(result) {
-                    if (result.code === 200) {
+                    if (result.status === 100) {
                         renderPaymentTable(result.data);
                         renderPagination(result.data);
                     } else {
@@ -276,6 +278,16 @@
                     statusHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">未支付</span>';
                 }
 
+                let refundHtml = '';
+                if (payment.isPay === false && (payment.isRefund === null || payment.isRefund === '' || payment.isRefund === undefined)) {
+                    refundHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">无需退款</span>';
+                } else
+                if (payment.isRefund === true) {
+                    refundHtml = '<span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">已退款</span>';
+                } else {
+                    refundHtml = '<button class="px-2 py-1 bg-blue-600 text-white rounded text-xs cursor-pointer hover:bg-blue-700" onclick="refundPayment(\'' + payment.orderNum + '\')">退款</button>';
+                }
+
                 html += `
                     <tr class="hover:bg-gray-50">
                         <td class="px-3 py-3 border-b border-gray-200" title="${payment.orderNum}">${truncateText(payment.orderNum, 25)}</td>
@@ -284,6 +296,7 @@
                         <td class="px-3 py-3 border-b border-gray-200">${buyerLogonId}</td>
                         <td class="px-3 py-3 border-b border-gray-200">${statusHtml}</td>
                         <td class="px-3 py-3 border-b border-gray-200">${updateTime}</td>
+                        <td class="px-3 py-3 border-b border-gray-200">${refundHtml}</td>
                     </tr>
                 `;
             });
@@ -325,6 +338,28 @@
                      </div>`;
 
             pagination.html(html);
+        }
+
+        function refundPayment(orderNum) {
+            if (!confirm('确定要退款吗？')) return;
+
+            $.ajax({
+                url: API_BASE_URL + "/ali/pay/face/refund",
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ outTradeNo: orderNum }),
+                success: function(result) {
+                    if (result.status === 100) {
+                        alert('退款请求已发送，请等待处理');
+                        loadPaymentList();
+                    } else {
+                        alert('退款失败：' + (result.message || '未知错误'));
+                    }
+                },
+                error: function() {
+                    alert('网络错误，无法发送退款请求');
+                }
+            });
         }
 
         function changePage(page) {

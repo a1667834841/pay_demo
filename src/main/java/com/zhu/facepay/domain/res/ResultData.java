@@ -34,5 +34,12 @@ public class ResultData<T> {
         resultData.setMessage(message);
         return resultData;
     }
+
+    public static <T> ResultData<T> fail(String message) {
+        ResultData<T> resultData = new ResultData<>();
+        resultData.setStatus(-1);
+        resultData.setMessage(message);
+        return resultData;
+    }
 }
 
