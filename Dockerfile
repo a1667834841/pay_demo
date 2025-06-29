@@ -10,6 +10,5 @@ FROM openjdk:8-jdk-alpine
 WORKDIR /app
 RUN mkdir -p data
 COPY --from=builder /build/target/*.jar app.jar
-COPY data/pay.db data/pay.db
 EXPOSE 9002
 CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]

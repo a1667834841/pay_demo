@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,14 +13,17 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
         .card {
             transition: all 0.3s ease-in-out;
         }
+
         .card:hover {
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
+
 <body class="bg-base-200 min-h-screen p-4 sm:p-8 font-sans">
     <div class="max-w-7xl mx-auto">
         <header class="text-center mb-10">
@@ -36,11 +40,13 @@
                         <div class="space-y-4">
                             <div class="form-control w-full">
                                 <label class="label" for="totalAmount"><span class="label-text">支付金额 (元)</span></label>
-                                <input type="number" id="totalAmount" placeholder="例如: 0.1" value="0.1" step="0.1" min="0.01" class="input input-bordered w-full" />
+                                <input type="number" id="totalAmount" placeholder="例如: 0.1" value="0.1" step="0.1"
+                                    min="0.01" class="input input-bordered w-full" />
                             </div>
                             <div class="form-control w-full">
                                 <label class="label" for="subject"><span class="label-text">商品信息</span></label>
-                                <input type="text" id="subject" placeholder="例如: 一杯咖啡" value="测试商品" class="input input-bordered w-full" />
+                                <input type="text" id="subject" placeholder="例如: 一杯咖啡" value="测试商品"
+                                    class="input input-bordered w-full" />
                             </div>
                         </div>
                         <div class="card-actions mt-6">
@@ -48,14 +54,16 @@
                         </div>
 
                         <div id="qrSection" style="display: none;" class="mt-6 text-center">
-                            <div class="border-2 border-dashed border-base-300 rounded-lg p-4 inline-block" id="qrContainer">
+                            <div class="border-2 border-dashed border-base-300 rounded-lg p-4 inline-block"
+                                id="qrContainer">
                                 <div class="text-base-content/50">等待生成...</div>
                             </div>
                             <div class="flex-1 bg-base-200 p-4 rounded-lg mt-4" id="paymentInfo">
                                 <h3 class="text-lg font-bold mb-2">支付详情</h3>
                                 <p class="text-sm"><strong>订单号：</strong><span id="currentOrderNum">-</span></p>
                                 <p class="text-sm"><strong>支付金额：</strong><span id="currentAmount">-</span></p>
-                                <p class="text-sm"><strong>支付状态：</strong><span id="currentStatus" class="font-bold">等待支付</span></p>
+                                <p class="text-sm"><strong>支付状态：</strong><span id="currentStatus"
+                                        class="font-bold">等待支付</span></p>
                             </div>
                         </div>
                     </div>
@@ -70,11 +78,14 @@
                         <div class="grid md:grid-cols-3 gap-4 items-end">
                             <div class="form-control w-full">
                                 <label class="label" for="searchOrderNum"><span class="label-text">订单号</span></label>
-                                <input type="text" id="searchOrderNum" placeholder="搜索订单号" class="input input-bordered w-full" />
+                                <input type="text" id="searchOrderNum" placeholder="搜索订单号"
+                                    class="input input-bordered w-full" />
                             </div>
                             <div class="form-control w-full">
-                                <label class="label" for="searchBuyerLogonId"><span class="label-text">买家账号</span></label>
-                                <input type="text" id="searchBuyerLogonId" placeholder="搜索买家账号" class="input input-bordered w-full" />
+                                <label class="label" for="searchBuyerLogonId"><span
+                                        class="label-text">买家账号</span></label>
+                                <input type="text" id="searchBuyerLogonId" placeholder="搜索买家账号"
+                                    class="input input-bordered w-full" />
                             </div>
                             <div class="form-control w-full">
                                 <label class="label" for="searchPayStatus"><span class="label-text">支付状态</span></label>
@@ -85,12 +96,12 @@
                                 </select>
                             </div>
                         </div>
-                         <div class="form-control w-full mt-4">
-                                <div class="flex gap-2 justify-end">
-                                    <button class="btn btn-ghost" id="resetBtn">重置</button>
-                                    <button class="btn btn-primary" id="searchBtn">搜索</button>
-                                </div>
+                        <div class="form-control w-full mt-4">
+                            <div class="flex gap-2 justify-end">
+                                <button class="btn btn-ghost" id="resetBtn">重置</button>
+                                <button class="btn btn-primary" id="searchBtn">搜索</button>
                             </div>
+                        </div>
 
                         <div class="overflow-x-auto mt-4">
                             <table id="paymentTable" class="table w-full">
@@ -106,7 +117,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="paymentTableBody">
-                                    <tr><td colspan="7" class="text-center py-10"><span class="loading loading-dots loading-lg"></span></td></tr>
+                                    <tr>
+                                        <td colspan="7" class="text-center py-10"><span
+                                                class="loading loading-dots loading-lg"></span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -130,7 +144,7 @@
         let currentOrderNum = null;
         let eventSource = null;
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             loadPaymentList();
             bindEvents();
             setInterval(loadPaymentList, 10000); // 每10秒刷新列表
@@ -140,7 +154,7 @@
             $('#createPayment').click(createPayment);
             $('#searchBtn').click(() => { currentPage = 0; loadPaymentList(); });
             $('#resetBtn').click(resetSearch);
-            $('input').keypress(function(e) {
+            $('input').keypress(function (e) {
                 if (e.which === 13) $('#searchBtn').click();
             });
         }
@@ -158,7 +172,7 @@
             `;
 
             const toastElement = $(toastHtml).appendTo(toastContainer);
-            toastElement.fadeIn(300).delay(3000).fadeOut(500, function() { $(this).remove(); });
+            toastElement.fadeIn(300).delay(3000).fadeOut(500, function () { $(this).remove(); });
         }
 
         function createPayment() {
@@ -185,7 +199,7 @@
                     tradeNo: currentOrderNum,
                     notifyUrl: API_BASE_URL + "/test/notify"
                 },
-                success: function(result) {
+                success: function (result) {
                     if (result.status === 100) {
                         $('#qrContainer').empty();
                         new QRCode(document.getElementById("qrContainer"), {
@@ -207,7 +221,7 @@
                         $('#qrContainer').html('<div class="text-error">生成失败</div>');
                     }
                 },
-                error: function() {
+                error: function () {
                     showToast('网络错误，请稍后重试', 'error');
                     $('#qrContainer').html('<div class="text-error">网络错误</div>');
                 }
@@ -220,7 +234,7 @@
             if (window.EventSource) {
                 eventSource = new EventSource(API_BASE_URL + '/test/result?orderNum=' + currentOrderNum);
 
-                eventSource.addEventListener('message', function(e) {
+                eventSource.addEventListener('message', function (e) {
                     const message = e.data;
                     console.log('支付消息：', message);
 
@@ -236,7 +250,7 @@
                     }
                 });
 
-                eventSource.addEventListener('error', function(e) {
+                eventSource.addEventListener('error', function (e) {
                     if (e.readyState === EventSource.CLOSED) {
                         console.log('支付监听连接已关闭');
                     }
@@ -280,7 +294,7 @@
                 url: API_BASE_URL + "/payBill/page",
                 method: 'GET',
                 data: searchParams,
-                success: function(result) {
+                success: function (result) {
                     if (result.status === 100) {
                         renderPaymentTable(result.data);
                         renderPagination(result.data);
@@ -288,7 +302,7 @@
                         $('#paymentTableBody').html('<tr><td colspan="7" class="text-center py-10">加载失败：' + (result.message || '未知错误') + '</td></tr>');
                     }
                 },
-                error: function() {
+                error: function () {
                     $('#paymentTableBody').html('<tr><td colspan="7" class="text-center py-10">网络错误，无法加载支付列表</td></tr>');
                 }
             });
@@ -303,7 +317,7 @@
             }
 
             let html = '';
-            data.content.forEach(function(payment) {
+            data.content.forEach(function (payment) {
                 const createTime = formatDateTime(payment.createTime);
                 const updateTime = formatDateTime(payment.updateTime);
                 const amount = payment.payAmount ? '¥' + parseFloat(payment.payAmount).toFixed(2) : '-';
@@ -311,18 +325,18 @@
 
                 let statusHtml = '';
                 if (payment.isPay === true) {
-                    statusHtml = '<div class="badge badge-success gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>已支付</div>';
+                    statusHtml = '<div class="badge badge-success gap-2 flex items-center whitespace-nowrap">已支付</div>';
                 } else {
-                    statusHtml = '<div class="badge badge-warning gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>未支付</div>';
+                    statusHtml = '<div class="badge badge-warning gap-2 flex items-center whitespace-nowrap">未支付</div>';
                 }
 
                 let refundHtml = '';
                 if (payment.isPay === false && (payment.isRefund === null || payment.isRefund === '' || payment.isRefund === undefined)) {
-                    refundHtml = '<div class="badge badge-ghost">无需退款</div>';
+                    refundHtml = '<div class="badge badge-ghost flex items-center whitespace-nowrap">无需退款</div>';
                 } else if (payment.isRefund === true) {
-                    refundHtml = '<div class="badge badge-error">已退款</div>';
+                    refundHtml = '<div class="badge badge-error flex items-center whitespace-nowrap">已退款</div>';
                 } else {
-                    refundHtml = `<button class="btn btn-xs btn-ghost text-primary" onclick="refundPayment('${payment.orderNum}')">退款</button>`;
+                    refundHtml = `<button class="btn btn-xs btn-ghost text-primary flex items-center whitespace-nowrap" onclick="refundPayment('${payment.orderNum}')">退款</button>`;
                 }
 
                 html += `
@@ -350,15 +364,15 @@
             }
 
             let html = '<div class="join">';
-            
+
             html += `<button ${data.first ? 'disabled' : ''} onclick="changePage(${currentPage - 1})" class="join-item btn btn-sm">«</button>`;
-            
+
             html += `<button class="join-item btn btn-sm">第 ${currentPage + 1} / ${data.totalPages} 页</button>`;
-            
+
             html += `<button ${data.last ? 'disabled' : ''} onclick="changePage(${currentPage + 1})" class="join-item btn btn-sm">»</button>`;
 
             html += '</div>';
-            
+
             pagination.html(html);
         }
 
@@ -367,10 +381,10 @@
 
             $.ajax({
                 url: API_BASE_URL + "/ali/pay/face/refund",
-                method: 'POST',
+                type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ outTradeNo: orderNum }),
-                success: function(result) {
+                success: function (result) {
                     if (result.status === 100) {
                         showToast('退款请求已发送，请等待处理', 'info');
                         loadPaymentList();
@@ -378,7 +392,7 @@
                         showToast('退款失败：' + (result.message || '未知错误'), 'error');
                     }
                 },
-                error: function() {
+                error: function () {
                     showToast('网络错误，无法发送退款请求', 'error');
                 }
             });
@@ -407,4 +421,5 @@
         window.addEventListener('beforeunload', closePaymentListener);
     </script>
 </body>
+
 </html>
