@@ -34,8 +34,25 @@
 
 ### 部署方式：  
 1. 克隆项目，配置支付宝相关参数（可通过 .env 文件或 docker-compose 环境变量注入）
+注意.env文件需要和 docker-compose.yml 在同一目录下
+
+env环境变量
+
+| 参数 | 说明      | 示例                      |
+|--|---------|-------------------------|
+| ALIPAY_APP_ID | 支付宝应用ID | 2021000116666666        |
+| ALI_PAY_PRIVATE_KEY | 支付宝私钥   | -----BEGIN PRIVATE KEY... |
+| ALI_PAY_PUBLIC_KEY | 支付宝公钥   | -----BEGIN PUBLIC KEY... |
+| ALIPAY_NOTIFY_URL | 支付宝异步通知地址 | http://yourdomain.com/alipay/notify |
+
+
 2. 一键构建并运行 Docker 容器
+```bash
+docker-compose up -d 
+```
 3. 访问网站，体验支付宝扫码支付
+
+访问地址：http://localhost:9002/view/index.html
 
 ### 适合人群：  
 - 个人开发者
