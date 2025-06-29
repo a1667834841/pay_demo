@@ -50,21 +50,26 @@ public class AliPayService implements PayService {
     @Override
     public ResultData<RefundRes> refund(RefundReq refundReq) throws AlipayApiException {
 
+        // 查询订单
+        PayBill payBill = payBillRepository.getPayBillByOrderNum(refundReq.getOutTradeNo());
+        if (payBill == null) {
+            return ResultData.fail("订单不存在");
+        }
+
         AliRefundInfo aliRefundInfo = new AliRefundInfo();
         aliRefundInfo.setOutTradeNo(refundReq.getOutTradeNo());
         aliRefundInfo.setTradeNo(refundReq.getTradeNo());
         aliRefundInfo.setOutRequestNo("RF" + DateUtil.current()+ UUID.fastUUID());
+        aliRefundInfo.setRefundAmount(payBill.getPayAmount());
 
         AlipayTradeRefundResponse refundResponse = payUtils.refund(aliRefundInfo);
         if (refundResponse.isSuccess() && "Y".equals(refundResponse.getFundChange())) {
 
             // 修改订单退款状态
-            PayBill payBill = payBillRepository.getPayBillByOrderNum(refundReq.getOutTradeNo());
-            if (payBill != null) {
-                payBill.setIsRefund(false);
-                payBillRepository.saveAndFlush(payBill);
-                log.info("订单号：{} 退款成功", refundReq.getOutTradeNo());
-            }
+            payBill.setIsRefund(false);
+            payBillRepository.saveAndFlush(payBill);
+            log.info("订单号：{} 退款成功", refundReq.getOutTradeNo());
+
 
             RefundRes refundRes = new RefundRes();
             refundRes.setOutTradeNo(refundReq.getOutTradeNo());
