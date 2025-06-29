@@ -1,8 +1,10 @@
 ## 项目名称
 个人网站支付宝面对面支付接入方案
 
-## 测试地址
-http://test.ggball.top:9002/view/index.html
+[测试地址](http://test.ggball.top:9002/view/index.html)
+
+## 相关介绍
+[相关介绍](https://www.ggball.top/pages/6bf2fe/#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF)
 
 ## 项目截图
 ![img.png](data/image/img.png)
